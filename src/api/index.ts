@@ -16,3 +16,10 @@ export const register = (data: any) => {
     data
   })
 };
+
+export const getMembers = () => {
+  return request({
+    method: "POST",
+    url: "/pmlist",
+  })
+}

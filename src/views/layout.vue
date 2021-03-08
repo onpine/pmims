@@ -3,14 +3,18 @@
     <a-layout id="components-layout-demo-custom-trigger">
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
         <div class="logo" />
-        <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-          <a-menu-item key="1">
-            <a-icon type="user" />
+        <a-menu
+          theme="dark"
+          mode="inline"
+          :default-selected-keys="[$route.path]"
+        >
+          <a-menu-item key="/pmim" @click="change('/')">
+            <a-icon type="team" />
             <span>党员管理</span>
           </a-menu-item>
-          <a-menu-item key="2">
-            <a-icon type="video-camera" />
-            <span>nav 2</span>
+          <a-menu-item key="/add" @click="change('/add')">
+            <a-icon type="user-add" />
+            <span>添加党员</span>
           </a-menu-item>
           <a-menu-item key="3">
             <a-icon type="upload" />
@@ -55,7 +59,11 @@ export default {
   computed: {},
   watch: {},
 
-  methods: {}
+  methods: {
+    change(path) {
+      this.$router.push(path);
+    }
+  }
 };
 </script>
 

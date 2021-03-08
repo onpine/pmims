@@ -4,20 +4,30 @@ import Login from "../views/login.vue";
 import Register from "../views/register.vue";
 import Layout from "../views/layout.vue";
 import Pmim from "../views/pmim.vue";
+import Add from "../views/add.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "layout",
     component: Layout,
     children: [
       //党员管理
       {
         path: "/",
+        component: Pmim,
+        redirect: "/pmim"
+      },
+      {
+        path: "/pmim",
         name: "pmim",
         component: Pmim
+      },
+      {
+        path: "/add",
+        name: "add",
+        component: Add
       }
     ]
   },

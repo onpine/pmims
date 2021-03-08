@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { getMembers } from "../api/index.ts";
 const data = [
   {
     key: "1",
@@ -201,10 +202,7 @@ export default {
   computed: {},
   watch: {},
   created() {
-    console.log("created");
-  },
-  mounted() {
-    console.log("created");
+    this.loadMembers();
   },
   methods: {
     handleSearch(selectedKeys, confirm, dataIndex) {
@@ -216,6 +214,15 @@ export default {
     handleReset(clearFilters) {
       clearFilters();
       this.searchText = "";
+    },
+    loadMembers() {
+      getMembers()
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
