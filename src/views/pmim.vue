@@ -1,202 +1,118 @@
 <template>
   <div class="pmim-container">
-    <a-table :data-source="data" :columns="columns">
-      <div
-        slot="filterDropdown"
-        slot-scope="{
-          setSelectedKeys,
-          selectedKeys,
-          confirm,
-          clearFilters,
-          column
-        }"
-        style="padding: 8px"
-      >
-        <a-input
-          v-ant-ref="c => (searchInput = c)"
-          :placeholder="`Search ${column.dataIndex}`"
-          :value="selectedKeys[0]"
-          style="width: 188px; margin-bottom: 8px; display: block;"
-          @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-          @pressEnter="
-            () => handleSearch(selectedKeys, confirm, column.dataIndex)
-          "
-        />
+    <a-table :data-source="data" :columns="columns" rowKey="uid">
+      <a slot="uid" slot-scope="text, record" @click="showModal(record.uid)">{{
+        text
+      }}</a>
+      <span slot="select" slot-scope="text, record">
         <a-button
           type="primary"
-          icon="search"
-          size="small"
-          style="width: 90px; margin-right: 8px"
-          @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+          shape="circle"
+          icon="edit"
+          @click="showEditModal(record.uid)"
+        />
+        <a-popconfirm
+          :title="'确认删除' + record.uid"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="confirm(record.uid)"
+          @cancel="cancel"
         >
-          Search
-        </a-button>
-        <a-button
-          size="small"
-          style="width: 90px"
-          @click="() => handleReset(clearFilters)"
-        >
-          Reset
-        </a-button>
-      </div>
-      <a-icon
-        slot="filterIcon"
-        slot-scope="filtered"
-        type="search"
-        :style="{ color: filtered ? '#108ee9' : undefined }"
-      />
-      <template slot="customRender" slot-scope="text, record, index, column">
-        <span v-if="searchText && searchedColumn === column.dataIndex">
-          <template
-            v-for="(fragment, i) in text
-              .toString()
-              .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-          >
-            <mark
-              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-              :key="i"
-              class="highlight"
-              >{{ fragment }}</mark
-            >
-            <template v-else>{{ fragment }}</template>
-          </template>
-        </span>
-        <template v-else>
-          {{ text }}
-        </template>
-      </template>
+          <a-button type="danger" shape="circle" icon="delete" />
+        </a-popconfirm>
+      </span>
     </a-table>
+    <a-modal
+      v-model="visible"
+      width="600px"
+      :centered="true"
+      title="详细信息"
+      @ok="handleOk"
+    >
+      <a-descriptions :title="'UID：' + userInfo.uid" layout="vertical">
+        <a-descriptions-item label="姓名">
+          {{ userInfo.name }}
+        </a-descriptions-item>
+        <a-descriptions-item label="单位">
+          {{ userInfo.company }}
+        </a-descriptions-item>
+        <a-descriptions-item label="党支部">
+          {{ userInfo.PartyBranch }}
+        </a-descriptions-item>
+        <a-descriptions-item label="注册时间">
+          {{ userInfo.registTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="手机号">
+          {{ userInfo.phone }}
+        </a-descriptions-item>
+        <a-descriptions-item label="邮箱">
+          {{ userInfo.email }}
+        </a-descriptions-item>
+      </a-descriptions>
+    </a-modal>
+    <div>
+      <a-modal
+        title="修改信息"
+        width="700px"
+        :centered="true"
+        :destroyOnClose="true"
+        :visible="editVisible"
+        :confirm-loading="confirmLoading"
+        :footer="null"
+        @ok="handleEditOk"
+        @cancel="handleEditCancel"
+      >
+        <edit :uid="editUid" />
+      </a-modal>
+    </div>
   </div>
 </template>
 
 <script>
-import { getMembers } from "../api/index.ts";
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park"
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park"
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park"
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park"
-  }
-];
+import { getMembers, deleteMember, getMemberInfo } from "../api/index.ts";
+import Edit from "./edit.vue";
 export default {
   name: "pmimContainer",
-  components: {},
+  components: {
+    Edit
+  },
   props: {},
   data() {
     return {
-      data,
+      data: [],
       searchText: "",
       searchInput: null,
       searchedColumn: "",
       columns: [
         {
-          title: "Name",
-          dataIndex: "name",
-          key: "name",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender"
-          },
-          onFilter: (value, record) =>
-            record.name
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              }, 0);
-            }
-          }
+          title: "UID",
+          dataIndex: "uid",
+          scopedSlots: { customRender: "uid" }
         },
         {
-          title: "Age",
-          dataIndex: "age",
-          key: "age",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender"
-          },
-          onFilter: (value, record) =>
-            record.age
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          }
+          title: "姓名",
+          dataIndex: "name"
         },
         {
-          title: "Address",
-          dataIndex: "address",
-          key: "address",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender"
-          },
-          onFilter: (value, record) =>
-            record.address
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          }
+          title: "单位",
+          dataIndex: "company"
+        },
+        {
+          title: "党支部",
+          dataIndex: "PartyBranch"
         },
         {
           title: "选择",
           dataIndex: "select",
-          key: "select",
-          scopedSlots: {
-            filterDropdownVisible: false,
-
-            customRender: "customRender"
-          },
-          onFilter: (value, record) =>
-            record.address
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          }
+          scopedSlots: { customRender: "select" }
         }
-      ]
+      ],
+      visible: false,
+      userInfo: {},
+      ModalText: "Content of the modal",
+      editVisible: false,
+      confirmLoading: false,
+      editUid: ""
     };
   },
   computed: {},
@@ -219,10 +135,78 @@ export default {
       getMembers()
         .then(res => {
           console.log(res);
+          this.data = res.data.data;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    confirm(e) {
+      console.log(e);
+      this.deleteMember(e);
+    },
+    cancel(e) {
+      console.log(e);
+      this.$message.error("Click on No");
+    },
+    deleteMember(uid) {
+      const _this = this;
+      const key = "_delete";
+      this.$message.loading({ content: "Loading...", key, duration: 0 });
+      deleteMember(uid)
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+            this.$message.success({ content: "删除成功!", key, duration: 2 });
+            for (let index = 0; index < _this.data.length; index++) {
+              if (_this.data[index].uid == uid) {
+                _this.data.splice(index, 1);
+              }
+            }
+          } else {
+            this.$message.warning({ content: "添加失败!", key, duration: 2 });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error({ content: "请求失败!", key, duration: 2 });
+        });
+    },
+    getMember(uid) {
+      const _this = this;
+      getMemberInfo(uid)
+        .then(res => {
+          console.log(res);
+          _this.userInfo = res.data.data[0];
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    showModal(uid) {
+      this.userInfo = {};
+      this.getMember(uid);
+      this.visible = true;
+    },
+    handleOk(e) {
+      console.log(e);
+      this.visible = false;
+    },
+    showEditModal(uid) {
+      this.editUid = uid;
+      this.editVisible = true;
+    },
+    handleEditOk(e) {
+      this.ModalText = "The modal will be closed after two seconds";
+      this.confirmLoading = true;
+      setTimeout(() => {
+        this.visible = false;
+        this.confirmLoading = false;
+      }, 2000);
+    },
+    handleEditCancel(e) {
+      console.log("Clicked cancel button");
+      this.editVisible = false;
     }
   }
 };

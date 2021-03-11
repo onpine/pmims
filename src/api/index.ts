@@ -20,6 +20,48 @@ export const register = (data: any) => {
 export const getMembers = () => {
   return request({
     method: "POST",
-    url: "/pmlist",
+    url: "/pmdata",
+  })
+}
+
+export const deleteMember = (uid: number) => {
+  return request({
+    method: "POST",
+    url: "/delpm",
+    data: {
+      id: uid
+    }
+  })
+};
+export const getMemberInfo = (uid: number) => {
+  return request({
+    method: "POST",
+    url: "/pmdata",
+    data: {
+      id: uid
+    }
+  })
+};
+export const addMember = (data: any) => {
+  return request({
+    method: "POST",
+    url: "/addpm",
+    data
+  })
+};
+export const editInfo = (data: any) => {
+  return request({
+    method: "POST",
+    url: "/modifypm",
+    data
+  })
+}
+export const logout = (uid: String) => {
+  return request({
+    method: "POST",
+    url: "/logout",
+    data: {
+      id: uid
+    }
   })
 }

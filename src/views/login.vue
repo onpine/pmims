@@ -30,6 +30,7 @@
 
 <script>
 import { login } from "../api/index.ts";
+import { setStorage } from "../utils/storage.ts";
 export default {
   name: "loginContainer",
   components: {},
@@ -93,6 +94,8 @@ export default {
           console.log(res);
           if (res.status == 200) {
             this.$message.success({ content: "登陆成功!", key, duration: 2 });
+            setStorage("id", res.data.id);
+            setStorage("token", res.data.token);
             this.$router.push({ path: "/" });
           } else {
             this.$message.warning({ content: "失败了!", key, duration: 2 });
@@ -110,7 +113,7 @@ export default {
 <style scoped lang="less">
 .login-container {
   background-image: url("../images/bg.png");
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   position: fixed;
   left: 0;

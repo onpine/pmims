@@ -178,7 +178,7 @@ export default {
           console.log(res);
           if (res.status == 200) {
             this.$message.success({ content: "登陆成功!", key, duration: 2 });
-            this.$router.push({ name: "layout" });
+            this.$router.push({ path: "/pmim" });
           } else {
             this.$message.warning({ content: "失败了!", key, duration: 2 });
           }

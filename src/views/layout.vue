@@ -16,9 +16,9 @@
             <a-icon type="user-add" />
             <span>添加党员</span>
           </a-menu-item>
-          <a-menu-item key="3">
+          <a-menu-item key="/fee" @click="change('/fee')">
             <a-icon type="upload" />
-            <span>nav 3</span>
+            <span>党费管理</span>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
@@ -29,7 +29,20 @@
             :type="collapsed ? 'menu-unfold' : 'menu-fold'"
             @click="() => (collapsed = !collapsed)"
           />
-          党员信息管理
+          <span>党员信息管理</span>
+          <a-dropdown
+            style="float: right; margin-right: 20px"
+            placements="bottomCenter"
+          >
+            <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+              {{ uid }}<a-icon type="down" />
+            </a>
+            <a-menu slot="overlay" style="text-align: center">
+              <a-menu-item>
+                <a href="javascript:;" @click="handleLogout()">登出</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </a-layout-header>
         <a-layout-content
           :style="{
@@ -47,21 +60,38 @@
 </template>
 
 <script>
+import { logout } from "../api/index.ts";
+import { getStorage } from "../utils/storage.ts";
 export default {
   name: "layoutContainer",
   components: {},
   props: {},
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      uid: ""
     };
   },
   computed: {},
   watch: {},
-
+  created() {
+    this.uid = getStorage("id");
+  },
   methods: {
     change(path) {
       this.$router.push(path);
+    },
+    handleLogout() {
+      logout(getStorage("id"))
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+            this.$router.push({ path: "/login" });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
