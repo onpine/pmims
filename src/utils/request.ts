@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "@/router";
-import { message } from 'ant-design-vue';
+import { message } from "ant-design-vue";
 
 const request = axios.create({
   baseURL: "http://zinchon.com:337"
@@ -10,27 +10,26 @@ request.interceptors.request.use(
   // 任何所有请求都会经过这里
   // config 时当前请求相关的配置信息对象
   // config 是可以修改的
-  function (config) {
-    const uid = window.localStorage.getItem('token')
-
+  function (config: any) {
+    const token = window.localStorage.getItem('token')
     // 如果又有用户登录信息，则统一设置token
-    if (uid) {
-      config.headers.Authorization = uid
+    if (token) {
+      config.headers.Authorization = token
     }
 
     // 当这里 return config 之后请求才会真正的发出去
     return config
   },
   // 请求失败会经过这里
-  function (error) {
+  function (error: any) {
     return Promise.reject(error)
   }
 )
 // 响应拦截器
-request.interceptors.response.use(function (response) {
+request.interceptors.response.use(function (response: any) {
   // 所有响应码为 2xx 的都会进入这里
   return response
-}, function (error) {
+}, function (error: any) {
   const status = error.response.status
   // 任何超出 2xx 的响应码都会进入这里
   if (error.response && status === 401) {

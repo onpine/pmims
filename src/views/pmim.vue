@@ -196,7 +196,7 @@ export default {
       this.editUid = uid;
       this.editVisible = true;
     },
-    handleEditOk(e) {
+    handleEditOk() {
       this.ModalText = "The modal will be closed after two seconds";
       this.confirmLoading = true;
       setTimeout(() => {
@@ -204,7 +204,7 @@ export default {
         this.confirmLoading = false;
       }, 2000);
     },
-    handleEditCancel(e) {
+    handleEditCancel() {
       console.log("Clicked cancel button");
       this.editVisible = false;
     }

@@ -65,3 +65,12 @@ export const logout = (uid: String) => {
     }
   })
 }
+export const getFees = (PartyFeeManage: number) => {
+  return request({
+    method: "POST",
+    url: "pmdata",
+    data: {
+      PartyFeeManage
+    }
+  })
+}
