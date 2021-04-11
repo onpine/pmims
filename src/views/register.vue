@@ -8,11 +8,8 @@
         :rules="rules"
         v-bind="layout"
       >
-        <a-form-model-item has-feedback label="ID" prop="id">
-          <a-input v-model="ruleForm.id" type="text" autocomplete="off" />
-        </a-form-model-item>
-        <a-form-model-item has-feedback label="身份证号" prop="IdCardNum">
-          <a-input v-model="ruleForm.IdCardNum" />
+        <a-form-model-item has-feedback label="身份证号" prop="id">
+          <a-input v-model="ruleForm.id" />
         </a-form-model-item>
         <a-form-model-item has-feedback label="密码" prop="password">
           <a-input
@@ -64,14 +61,8 @@ export default {
   props: {},
   data() {
     let checkPending;
+
     const validateId = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("ID不能为空"));
-      } else {
-        callback();
-      }
-    };
-    const validateIdCardNum = (rule, value, callback) => {
       if (value.length !== 18) {
         callback(new Error("身份证号格式不正确"));
       } else {
@@ -120,48 +111,44 @@ export default {
     };
     return {
       ruleForm: {
-        id: "",
-        IdCardNum: "343334444444444445",
+        id: "343334444444444555",
         password: "000000",
         pass2: "000000",
         company: "信工",
         name: "onpine",
         PartyBranch: "信工党支部",
         phone: "",
-        email: ""
+        email: "",
       },
       rules: {
         id: [{ required: true, validator: validateId, trigger: "change" }],
-        IdCardNum: [
-          { required: true, validator: validateIdCardNum, trigger: "change" }
-        ],
         password: [
-          { required: true, validator: validatePass, trigger: "change" }
+          { required: true, validator: validatePass, trigger: "change" },
         ],
         pass2: [
-          { required: true, validator: validatePass2, trigger: "change" }
+          { required: true, validator: validatePass2, trigger: "change" },
         ],
         name: [{ required: true, validator: validateName, trigger: "change" }],
         company: [
-          { required: true, validator: validateCompany, trigger: "change" }
+          { required: true, validator: validateCompany, trigger: "change" },
         ],
         PartyBranch: [
-          { required: true, validator: validatePartyBranch, trigger: "change" }
+          { required: true, validator: validatePartyBranch, trigger: "change" },
         ],
         phone: [{ required: false, trigger: "change" }],
-        email: [{ required: false, trigger: "change" }]
+        email: [{ required: false, trigger: "change" }],
       },
       layout: {
         labelCol: { span: 4 },
-        wrapperCol: { span: 18 }
-      }
+        wrapperCol: { span: 18 },
+      },
     };
   },
   computed: {},
   watch: {},
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.register();
         } else {
@@ -174,7 +161,7 @@ export default {
       const key = "_register";
       this.$message.loading({ content: "Loading...", key, duration: 0 });
       register(this.ruleForm)
-        .then(res => {
+        .then((res) => {
           console.log(res);
           if (res.status == 200) {
             this.$message.success({ content: "登陆成功!", key, duration: 2 });
@@ -183,15 +170,15 @@ export default {
             this.$message.warning({ content: "失败了!", key, duration: 2 });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.$message.error({ content: "请求失败!", key, duration: 2 });
         });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
-  }
+    },
+  },
 };
 </script>
 

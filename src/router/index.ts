@@ -6,6 +6,7 @@ import Layout from "../views/layout.vue";
 import Pmim from "../views/pmim.vue";
 import Add from "../views/add.vue";
 import Fee from '../views/fee.vue'
+import Activity from '../views/activity.vue'
 
 Vue.use(VueRouter);
 
@@ -18,22 +19,42 @@ const routes: Array<RouteConfig> = [
       {
         path: "/",
         component: Pmim,
-        redirect: "/pmim"
+        redirect: "/pmim",
+        meta: {
+          title: '党员管理系统'
+        }
       },
       {
-        path: "/pmim",
+        path: "/pmim/:branch",
         name: "pmim",
-        component: Pmim
+        component: Pmim,
+        meta: {
+          title: '党员管理系统'
+        },
+        props: true
       },
       {
         path: "/add",
         name: "add",
-        component: Add
+        component: Add,
+        meta: {
+          title: '党员管理系统'
+        }
       },
       {
         path: "/fee",
         name: "fee",
-        component: Fee
+        component: Fee,
+        meta: {
+          title: '党员管理系统'
+        }
+      }, {
+        path: 'activity',
+        name: 'activity',
+        component: Activity,
+        meta: {
+          title: '党员管理系统'
+        }
       }
     ]
   },
@@ -43,12 +64,18 @@ const routes: Array<RouteConfig> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Login
+    component: Login,
+    meta: {
+      title: '登录'
+    }
   },
   {
     path: "/register",
     name: "register",
-    component: Register
+    component: Register,
+    meta: {
+      title: '注册'
+    }
   }
 ];
 
@@ -62,7 +89,7 @@ router.beforeEach((to, from, next) => {
   // 是 /login 允许通过
   const token = window.localStorage.getItem('token');
   // 校验非登录页面的登陆状态
-  if (to.path !== '/login') {
+  if (to.path !== '/login' && to.path !== '/register') {
     if (token) {
       next()
     } else {
@@ -74,4 +101,9 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+router.afterEach(function (to, from) {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+});
 export default router;

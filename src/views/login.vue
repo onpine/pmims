@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <h1 class="title">党员管理系统</h1>
     <div class="content">
       <h2>登录</h2>
       <a-form-model
@@ -60,24 +61,24 @@ export default {
     };
     return {
       ruleForm: {
-        id: "123456",
-        password: "000000"
+        id: "343334444444444445",
+        password: "000000",
       },
       rules: {
         id: [{ validator: validateId, trigger: "change" }],
-        password: [{ validator: validatePass, trigger: "change" }]
+        password: [{ validator: validatePass, trigger: "change" }],
       },
       layout: {
         labelCol: { span: 4 },
-        wrapperCol: { span: 18 }
-      }
+        wrapperCol: { span: 18 },
+      },
     };
   },
   computed: {},
   watch: {},
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.login();
         } else {
@@ -90,23 +91,23 @@ export default {
       const key = "_login";
       this.$message.loading({ content: "Loading...", key, duration: 0 });
       login(this.ruleForm)
-        .then(res => {
+        .then((res) => {
           console.log(res);
           if (res.status == 200) {
             this.$message.success({ content: "登陆成功!", key, duration: 2 });
             setStorage("id", res.data.id);
             setStorage("token", res.data.token);
-            this.$router.push({ path: "/" });
+            this.$router.push({ path: "/pmim/all" });
           } else {
             this.$message.warning({ content: "失败了!", key, duration: 2 });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.$message.error({ content: "请求失败!", key, duration: 2 });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -120,6 +121,12 @@ export default {
   bottom: 0;
   top: 0;
   right: 0;
+  .title {
+    text-align: center;
+    position: relative;
+    top: 200px;
+    font-size: 25px;
+  }
 }
 .content {
   background-color: #fff;
@@ -130,7 +137,7 @@ export default {
   // height: 300px;
   margin: 0 auto;
   position: relative;
-  top: calc(50% - 200px);
+  top: calc(50% - 150px);
   padding: 30px;
   h2 {
     text-align: center;

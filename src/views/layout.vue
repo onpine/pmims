@@ -6,15 +6,30 @@
         <a-menu
           theme="dark"
           mode="inline"
+          :open-keys="openKeys"
           :default-selected-keys="[$route.path]"
         >
-          <a-menu-item key="/pmim" @click="change('/')">
-            <a-icon type="team" />
-            <span>党员管理</span>
-          </a-menu-item>
-          <a-menu-item key="/add" @click="change('/add')">
+          <a-sub-menu key="/pmim">
+            <span slot="title">
+              <a-icon type="team" /> <span>党员管理</span></span
+            >
+            <a-menu-item key="/pmim/all" @click="change('/pmim/all')">
+              <a-icon type="team" />
+              <span>党员信息管理</span>
+            </a-menu-item>
+            <template v-for="(item, index) in branchs">
+              <a-menu-item
+                :key="'/pmim/' + item"
+                @click="change('/pmim/' + item)"
+              >
+                <a-icon type="team" /> <span>{{ item }}</span>
+              </a-menu-item>
+            </template>
+          </a-sub-menu>
+
+          <a-menu-item key="/activity" @click="change('/activity')">
             <a-icon type="user-add" />
-            <span>添加党员</span>
+            <span>活动管理</span>
           </a-menu-item>
           <a-menu-item key="/fee" @click="change('/fee')">
             <a-icon type="upload" />
@@ -34,7 +49,7 @@
             style="float: right; margin-right: 20px"
             placements="bottomCenter"
           >
-            <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+            <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
               {{ uid }}<a-icon type="down" />
             </a>
             <a-menu slot="overlay" style="text-align: center">
@@ -49,7 +64,7 @@
             margin: '24px 16px',
             padding: '24px',
             background: '#fff',
-            minHeight: '280px'
+            minHeight: '280px',
           }"
         >
           <router-view></router-view>
@@ -60,7 +75,7 @@
 </template>
 
 <script>
-import { logout } from "../api/index.ts";
+import { logout, getBranchs } from "../api/index.ts";
 import { getStorage } from "../utils/storage.ts";
 export default {
   name: "layoutContainer",
@@ -69,7 +84,9 @@ export default {
   data() {
     return {
       collapsed: false,
-      uid: ""
+      uid: "",
+      branchs: [],
+      openKeys: ["/pmim"],
     };
   },
   computed: {},
@@ -77,23 +94,35 @@ export default {
   created() {
     this.uid = getStorage("id");
   },
+  mounted() {
+    this.loadBranchs();
+  },
   methods: {
     change(path) {
       this.$router.push(path);
     },
     handleLogout() {
       logout(getStorage("id"))
-        .then(res => {
+        .then((res) => {
           console.log(res);
           if (res.status == 200) {
             this.$router.push({ path: "/login" });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
-  }
+    },
+    loadBranchs() {
+      getBranchs()
+        .then((res) => {
+          this.branchs = [...res.data.data];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
 };
 </script>
 

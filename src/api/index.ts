@@ -17,6 +17,27 @@ export const register = (data: any) => {
   })
 };
 
+export const getBranchs = () => {
+  return request({
+    method: "POST",
+    url: "/pblist",
+  })
+}
+
+export const getActivitys = () => {
+  return request({
+    method: "POST",
+    url: "/padata",
+  })
+}
+export const addActivity = (data: object) => {
+  return request({
+    method: "POST",
+    url: "/addpa",
+    data
+  })
+}
+
 export const getMembers = () => {
   return request({
     method: "POST",
