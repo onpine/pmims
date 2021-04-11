@@ -155,11 +155,11 @@ export default {
     };
     return {
       ruleForm: {
-        uid: "343334444444444445",
-        company: "信工",
-        name: "onpine",
+        uid: "",
+        company: "",
+        name: "",
         sex: "1",
-        PartyBranch: "信工党支部",
+        PartyBranch: "",
         phone: "",
         email: "",
         nation: "",

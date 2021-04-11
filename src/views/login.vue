@@ -64,8 +64,8 @@ export default {
     };
     return {
       ruleForm: {
-        id: "343334444444444445",
-        password: "000000",
+        id: "",
+        password: "",
       },
       rules: {
         id: [{ validator: validateId, trigger: "change" }],

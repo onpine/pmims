@@ -118,11 +118,11 @@ export default {
       },
       columns,
       form: {
-        organizer: "第三党支部",
-        time: "2018-2-3 12:56:00",
-        area: "1000",
-        type: "党员大会",
-        subject: "00",
+        organizer: "",
+        time: "",
+        area: "",
+        type: "",
+        subject: "",
       },
       layout: {
         labelCol: { span: 4 },

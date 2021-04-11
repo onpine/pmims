@@ -111,12 +111,12 @@ export default {
     };
     return {
       ruleForm: {
-        id: "343334444444444555",
-        password: "000000",
-        pass2: "000000",
-        company: "信工",
-        name: "onpine",
-        PartyBranch: "信工党支部",
+        id: "",
+        password: "",
+        pass2: "",
+        company: "",
+        name: "",
+        PartyBranch: "",
         phone: "",
         email: "",
       },
