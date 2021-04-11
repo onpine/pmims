@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h1 class="title">党员管理系统</h1>
+    <h1 class="title">党员信息管理系统</h1>
     <div class="content">
       <h2>登录</h2>
       <a-form-model
@@ -23,6 +23,9 @@
           <a-button type="primary" @click="submitForm('ruleForm')">
             登录
           </a-button>
+        </a-form-model-item>
+        <a-form-model-item :wrapper-col="{ span: 14, offset: 8 }">
+          <router-link to="/register">没有注册？去注册</router-link>
         </a-form-model-item>
       </a-form-model>
     </div>
@@ -124,8 +127,8 @@ export default {
   .title {
     text-align: center;
     position: relative;
-    top: 200px;
-    font-size: 25px;
+    top: 100px;
+    font-size: 50px;
   }
 }
 .content {
@@ -137,7 +140,7 @@ export default {
   // height: 300px;
   margin: 0 auto;
   position: relative;
-  top: calc(50% - 150px);
+  top: calc(50% - 280px);
   padding: 30px;
   h2 {
     text-align: center;
