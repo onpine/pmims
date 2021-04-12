@@ -64,7 +64,7 @@ export default {
     let checkPending;
 
     const validateId = (rule, value, callback) => {
-      if (value.length <= 6) {
+      if (value.length < 6) {
         callback(new Error("账号不少于6位"));
       } else {
         callback();

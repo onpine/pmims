@@ -69,7 +69,6 @@ const columns = [
 import { getFees, editInfo } from "../api/index.ts";
 import moment from "moment";
 import { getTimeDifference } from "../utils/day.ts";
-import request from "@/utils/request";
 export default {
   name: "feeContainer",
   components: {},
@@ -126,7 +125,7 @@ export default {
     onChange(date, dateString) {
       const key = "_edit";
       this.$message.loading({ content: "Loading...", key, duration: 0 });
-      editInfo({ id: this.clickId, PartyFeeSubmitTime: dateString })
+      editInfo({ uid: this.clickId, PartyFeeSubmitTime: dateString })
         .then((res) => {
           console.log(res);
           if (res.status == 200) {
