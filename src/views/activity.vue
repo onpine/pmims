@@ -34,6 +34,24 @@
               {{ record.time > 6 ? "未交" : "已交" }}
             </a-button>
           </span>
+
+          <span slot="select" slot-scope="text, record">
+            <!-- <a-button
+              type="primary"
+              shape="circle"
+              icon="edit"
+              @click="showEditModal(record.id)"
+            /> -->
+            <a-popconfirm
+              :title="'确认删除' + record.id"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="confirm(record.id)"
+              @cancel="cancel"
+            >
+              <a-button type="danger" shape="circle" icon="delete" />
+            </a-popconfirm>
+          </span>
         </a-table>
       </a-tab-pane>
       <a-tab-pane key="2" tab="添加活动" force-render>
@@ -102,8 +120,13 @@ const columns = [
     title: "主题",
     dataIndex: "subject",
   },
+  {
+    title: "选择",
+    dataIndex: "select",
+    scopedSlots: { customRender: "select" },
+  },
 ];
-import { getActivitys, addActivity } from "@/api/index.ts";
+import { getActivitys, addActivity, deleteActivity } from "@/api/index.ts";
 import moment from "moment";
 export default {
   name: "activity",
@@ -184,6 +207,46 @@ export default {
     },
     callback(key) {
       console.log(key);
+    },
+    cancel(e) {
+      console.log(e);
+      this.$message.error("Click on No");
+    },
+    showEditModal(uid) {
+      // this.editUid = uid;
+      // this.editVisible = true;
+    },
+    confirm(e) {
+      console.log(e);
+      this.deleteActivity(e);
+    },
+    deleteActivity(id) {
+      const _this = this;
+      const key = "_delete";
+      this.$message.loading({ content: "Loading...", key, duration: 0 });
+      deleteActivity(id)
+        .then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            this.$message.success({ content: "删除成功!", key, duration: 2 });
+            for (let index = 0; index < _this.data.length; index++) {
+              if (_this.data[index].id == id) {
+                _this.data.splice(index, 1);
+              }
+            }
+            for (let index = 0; index < _this.filterDate.length; index++) {
+              if (_this.filterDate[index].id == id) {
+                _this.filterDate.splice(index, 1);
+              }
+            }
+          } else {
+            this.$message.warning({ content: "添加失败!", key, duration: 2 });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error({ content: "请求失败!", key, duration: 2 });
+        });
     },
     // disabledDate(current) {
     //   // Can not select days before today and today

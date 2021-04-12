@@ -34,7 +34,9 @@
               {{ record.IdentityCategory == "0" ? "正式" : "预备" }}
             </a-tag>
           </span>
-
+          <span slot="sex" slot-scope="text, record">{{
+            record.sex == "1" ? "男" : "女"
+          }}</span>
           <span slot="select" slot-scope="text, record">
             <a-button
               type="primary"
@@ -123,6 +125,44 @@
 </template>
 
 <script>
+const columns = [
+  {
+    title: "身份证号",
+    dataIndex: "uid",
+    scopedSlots: { customRender: "uid" },
+  },
+  {
+    title: "姓名",
+    dataIndex: "name",
+  },
+  {
+    title: "性别",
+    dataIndex: "sex",
+    scopedSlots: { customRender: "sex" },
+  },
+  {
+    title: "入党时间",
+    dataIndex: "joinDate",
+  },
+  {
+    title: "单位",
+    dataIndex: "company",
+  },
+  {
+    title: "党支部",
+    dataIndex: "PartyBranch",
+  },
+  {
+    title: "身份类型",
+    dataIndex: "IdentityCategory",
+    scopedSlots: { customRender: "IdentityCategory" },
+  },
+  {
+    title: "选择",
+    dataIndex: "select",
+    scopedSlots: { customRender: "select" },
+  },
+];
 import { getMembers, deleteMember, getMemberInfo } from "../api/index.ts";
 import Add from "./add.vue";
 import Edit from "./edit.vue";
@@ -130,7 +170,6 @@ export default {
   name: "pmimContainer",
   components: {
     Edit,
-
     Add,
   },
   props: ["branch"],
@@ -145,35 +184,7 @@ export default {
         user: "",
         id: "",
       },
-      columns: [
-        {
-          title: "身份证号",
-          dataIndex: "uid",
-          scopedSlots: { customRender: "uid" },
-        },
-        {
-          title: "姓名",
-          dataIndex: "name",
-        },
-        {
-          title: "单位",
-          dataIndex: "company",
-        },
-        {
-          title: "党支部",
-          dataIndex: "PartyBranch",
-        },
-        {
-          title: "身份类型",
-          dataIndex: "IdentityCategory",
-          scopedSlots: { customRender: "IdentityCategory" },
-        },
-        {
-          title: "选择",
-          dataIndex: "select",
-          scopedSlots: { customRender: "select" },
-        },
-      ],
+      columns,
       visible: false,
       userInfo: {},
       ModalText: "Content of the modal",

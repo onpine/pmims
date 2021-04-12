@@ -54,6 +54,15 @@ export const deleteMember = (uid: number) => {
     }
   })
 };
+export const deleteActivity = (id: number) => {
+  return request({
+    method: "POST",
+    url: "/delpa",
+    data: {
+      id: id
+    }
+  })
+};
 export const getMemberInfo = (uid: number) => {
   return request({
     method: "POST",

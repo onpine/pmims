@@ -21,8 +21,20 @@
       <a-form-model-item has-feedback label="单位" prop="company">
         <a-input v-model="ruleForm.company" />
       </a-form-model-item>
-      <a-form-model-item has-feedback label="党支部" prop="PartyBranch">
+      <a-form-model-item has-feedback label="党支部">
         <a-input v-model="ruleForm.PartyBranch" />
+      </a-form-model-item>
+      <a-form-model-item has-feedback label="民族">
+        <a-input v-model="ruleForm.nation" />
+      </a-form-model-item>
+      <a-form-model-item has-feedback label="学历">
+        <a-input v-model="ruleForm.education" />
+      </a-form-model-item>
+      <a-form-model-item has-feedback label="地址">
+        <a-input v-model="ruleForm.address" />
+      </a-form-model-item>
+      <a-form-model-item has-feedback label="户籍">
+        <a-input v-model="ruleForm.householdRegister" />
       </a-form-model-item>
       <a-form-model-item has-feedback label="手机" prop="phone">
         <a-input v-model="ruleForm.phone" />
@@ -97,6 +109,10 @@ export default {
         PartyBranch: "",
         phone: "",
         email: "",
+        nation: "",
+        education: "",
+        address: "",
+        householdRegister: "",
       },
       rules: {
         uid: [{ required: true, validator: validateId, trigger: "change" }],

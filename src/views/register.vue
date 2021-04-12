@@ -8,7 +8,7 @@
         :rules="rules"
         v-bind="layout"
       >
-        <a-form-model-item has-feedback label="身份证号" prop="id">
+        <a-form-model-item has-feedback label="账号" prop="id">
           <a-input v-model="ruleForm.id" />
         </a-form-model-item>
         <a-form-model-item has-feedback label="密码" prop="password">
@@ -25,14 +25,15 @@
             autocomplete="off"
           />
         </a-form-model-item>
-        <a-form-model-item has-feedback label="姓名" prop="name">
-          <a-input v-model="ruleForm.name" type="text" autocomplete="off" />
-        </a-form-model-item>
+
         <a-form-model-item has-feedback label="单位" prop="company">
           <a-input v-model="ruleForm.company" />
         </a-form-model-item>
-        <a-form-model-item has-feedback label="党支部" prop="PartyBranch">
+        <a-form-model-item has-feedback label="党组织名称" prop="PartyBranch">
           <a-input v-model="ruleForm.PartyBranch" />
+        </a-form-model-item>
+        <a-form-model-item has-feedback label="党组织联系人" prop="PartyBranch">
+          <a-input v-model="ruleForm.PartyBranchContacts" />
         </a-form-model-item>
         <a-form-model-item has-feedback label="手机" prop="phone">
           <a-input v-model="ruleForm.phone" />
@@ -63,8 +64,8 @@ export default {
     let checkPending;
 
     const validateId = (rule, value, callback) => {
-      if (value.length !== 18) {
-        callback(new Error("身份证号格式不正确"));
+      if (value.length <= 6) {
+        callback(new Error("账号不少于6位"));
       } else {
         callback();
       }
@@ -88,13 +89,7 @@ export default {
         }
       }, 500);
     };
-    const validateName = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("姓名不能为空"));
-      } else {
-        callback();
-      }
-    };
+
     const validateCompany = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("单位不能为空"));
@@ -115,10 +110,11 @@ export default {
         password: "",
         pass2: "",
         company: "",
-        name: "",
+
         PartyBranch: "",
         phone: "",
         email: "",
+        PartyBranchContacts: "",
       },
       rules: {
         id: [{ required: true, validator: validateId, trigger: "change" }],
@@ -128,7 +124,6 @@ export default {
         pass2: [
           { required: true, validator: validatePass2, trigger: "change" },
         ],
-        name: [{ required: true, validator: validateName, trigger: "change" }],
         company: [
           { required: true, validator: validateCompany, trigger: "change" },
         ],
