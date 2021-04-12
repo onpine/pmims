@@ -50,7 +50,7 @@
             placements="bottomCenter"
           >
             <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-              {{ uid }}<a-icon type="down" />
+              {{ id }}<a-icon type="down" />
             </a>
             <a-menu slot="overlay" style="text-align: center">
               <a-menu-item>
@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       collapsed: false,
-      uid: "",
+      id: "",
       branchs: [],
       openKeys: ["/pmim"],
     };
@@ -92,7 +92,7 @@ export default {
   computed: {},
   watch: {},
   created() {
-    this.uid = getStorage("id");
+    this.id = getStorage("id");
   },
   mounted() {
     this.loadBranchs();
@@ -102,11 +102,15 @@ export default {
       this.$router.push(path);
     },
     handleLogout() {
+      const key = "logout";
       logout(getStorage("id"))
         .then((res) => {
           console.log(res);
           if (res.status == 200) {
+            this.$message.success({ content: "退出成功!", key, duration: 2 });
             this.$router.push({ path: "/login" });
+          } else {
+            this.$message.warning({ content: "退出异常!", key, duration: 2 });
           }
         })
         .catch((err) => {
