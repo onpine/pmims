@@ -18,7 +18,7 @@
             autocomplete="off"
           />
         </a-form-model-item>
-        <a-form-model-item has-feedback label="重复密码" prop="pass2">
+        <a-form-model-item has-feedback label="确认密码" prop="pass2">
           <a-input
             v-model="ruleForm.pass2"
             type="password"
