@@ -6,7 +6,7 @@
         <a-menu
           theme="dark"
           mode="inline"
-          :open-keys="openKeys"
+          :defaultOpenKeys="openKeys"
           :default-selected-keys="[$route.path]"
         >
           <a-sub-menu key="/pmim">
