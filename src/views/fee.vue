@@ -9,12 +9,7 @@
         </a-input>
       </a-form-model-item>
       <a-form-model-item>
-        <a-button
-          type="primary"
-          html-type="button"
-          :disabled="search.user === '' || search.id === ''"
-          @click="handleSearch"
-        >
+        <a-button type="primary" html-type="button" @click="handleSearch">
           搜索
         </a-button>
       </a-form-model-item>
