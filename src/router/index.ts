@@ -19,7 +19,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "/",
         component: Pmim,
-        redirect: "/pmim",
+        redirect: "/pmim/all",
         meta: {
           title: '党员管理系统'
         }
