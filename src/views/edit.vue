@@ -24,6 +24,18 @@
       <a-form-model-item has-feedback label="党支部">
         <a-input v-model="ruleForm.PartyBranch" />
       </a-form-model-item>
+      <a-form-model-item has-feedback label="转正日期" required>
+        <a-date-picker
+          @change="regularDateChange"
+          :placeholder="ruleForm.joinDate"
+        />
+      </a-form-model-item>
+      <a-form-model-item has-feedback label="人员类别" prop="sex">
+        <a-radio-group v-model="ruleForm.IdentityCategory">
+          <a-radio value="0"> 正式 </a-radio>
+          <a-radio value="1"> 预备 </a-radio>
+        </a-radio-group>
+      </a-form-model-item>
       <a-form-model-item has-feedback label="民族">
         <a-input v-model="ruleForm.nation" />
       </a-form-model-item>
@@ -113,6 +125,7 @@ export default {
         education: "",
         address: "",
         householdRegister: "",
+        IdentityCategory: undefined,
       },
       rules: {
         uid: [{ required: true, validator: validateId, trigger: "change" }],
@@ -187,6 +200,10 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    regularDateChange(date, dateString) {
+      console.log(date, dateString);
+      this.ruleForm.joinDate = dateString;
     },
   },
 };
